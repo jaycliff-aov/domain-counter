@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta name="theme-color" content="#eff7c2" />
+        <!-- <meta name="theme-color" content="#404040" /> -->
+		<title>Domain Counter</title>
+        <!-- <script type="text/javascript" src="./lib/documentRenderAndClone.js"></script> -->
+		<style type="text/css">
+			* {
+                box-sizing: border-box;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            html, body {
+                height: 100%;
+            }
+            body {
+                display: flex;
+            }
+            header {
+                background-color: #eff7c2;
+                /* background-color: #d4d4d4; */
+                display: flex;
+                height: 50px;
+                position: fixed;
+                top: 0;
+                width: 100%;
+            }
+            header > div {
+                align-items: center;
+                /* flex: 1; */
+                font-size: 1.5em;
+                padding: 10px;
+            }
+            header .title-area {
+                font-weight: bold;
+                width: 30%;
+            }
+            header .total-area {
+                flex: 1;
+                font-weight: bold;
+            }
+            header .total-area .num {
+                color: #f00000;
+                /* color: green; */
+            }
+            section {
+                display: flex;
+                flex: 1;
+                margin-top: 50px;
+            }
+            section > div {
+                /* flex: 1; */
+                padding: 10px;
+            }
+            section .input-area {
+                background-color: #637563;
+                width: 30%;
+            }
+            section .list-area {
+                flex: 1;
+            }
+            section .list-area ol {
+                height: 100%;
+                list-style-position: inside;
+                overflow: auto;
+                /* padding-left: 1.5em; */
+                text-transform: uppercase;
+            }
+            textarea {
+                border: solid 2px #c0c0c0;
+                border-radius: 4px;
+                color: black;
+                display: block;
+                font-size: 1em;
+                height: 100%;
+                padding: 4px;
+                resize: none;
+                width: 100%;
+            }
+            textarea:active,
+            textarea:focus {
+                border-color: orange;
+                outline: none;
+                /* outline: solid green 2px; */
+            }
+        </style>
+        <!--
+            EXAMPLE:
+
+            BEANMAKER.COM, RADONGASDETECTOR.COM, MINERALSTRADING.COM, DEEPBLUESEAS.COM, SURFACETREATMENTS.COM, GOVERNMENTANDPOLITICS.COM,
+            ONESHOTFILMS.COM, TRADEANDINVESTMENT.COM, STEVEPARRISH.COM, ECTIN.COM, VPNTALK.COM, DACEO.COM, DAIAX.COM, WOMENOFCHARACTER.COM,
+            BUNTMETALLE.COM, NORTHCENTRALIDAHO.COM, NEXTBESTSTEP.COM, FEELTHEROAD.COM, AWILDRIDE.COM, REASONTOCARE.COM, STOREVOLUTION.COM,
+            BETAALBAAR.COM, RICHWEBBER.COM, SANISYSTEMS.COM, PREMIERHOMEREALTY.COM, POSTDUIF.COM, FINEHOMESALES.COM, VITADENT.COM,
+            GLOTTERTAL.COM, SONGNDANCE.COM, SCORE11.COM, ACTYA.COM, IPENN.COM, SENVO.COM, SANEV.COM, FUTUREOFSOFTWARE.COM, SUEDKURVE.COM,
+            SATRYA.COM, NERDMANIA.COM, CENTERPARTIET.COM, EVANSIA.COM, FIRSTCHOICEBUSINESS.COM, ONDANGWA.COM, OUTSOURCINGSTRATEGY.COM,
+            REDSEACRUISES.COM, ALIUX.COM, HJORRING.COM, SWEDISHMASSAGETHERAPY.COM, SOCIALVENTURECAPITAL.COM, RESPONSABILITE.COM,
+            MATUREADULT.COM, L00K.COM, GAXEN.COM, GEWERBLICH.COM, MARINEWISE.COM, AERZTEHAUS.COM, ROCKANDSOIL.COM, LANAL.COM,
+            EFFECTIVEDIGITALMARKETING.COM, RXLAND.COM, SUPERSETUP.COM, FORTUNEOFWAR.COM, PYSXSY.COM, CHIEFKNOWLEDGEOFFICER.COM, WINDPIPE.COM,
+            POETRYANDART.COM, LEVIATA.COM, MARTIRANO.COM, PUBLICHEALTHMANAGEMENT.COM, ALLOTRIA.COM, SMALLANIMALHOSPITAL.COM, GROWONYOU.COM,
+            MYROMANIA.COM, THECAPITALREGION.COM, CHICKENANDBEEF.COM, THROATSPECIALIST.COM, CANCERADVISORS.COM, PHARMACOPEE.COM,
+            HIGHTECHTRAVEL.COM, WHOISLOG.COM, FRUTICOLA.COM, TREUSDELL.COM, SUPERVIX.COM, TOMBRENNER.COM, ARTOFHORROR.COM, FUTUREOFASIA.COM,
+            SONNENAUFGANG.COM
+        -->
+    </head>
+    <body>
+        <header id="header">
+            <div class="title-area">Domain Counter</div>
+            <div class="total-area">Total: <span class="num">N/A</span></div>
+        </header>
+        <section>
+            <div class="input-area">
+                <textarea placeholder="Paste domain string here..." cols="100" rows="100"></textarea>
+            </div>
+            <div class="list-area">
+                <ol></ol>
+            </div>
+        </section>
+        <script type="text/javascript">
+            if (typeof Element === "function" && typeof Element.prototype === "object" && typeof Element.prototype.clearChildren !== "function") {
+                Object.defineProperty(Element.prototype, 'clearChildren', {
+                    configurable: true,
+                    enumerable: false,
+                    value: function () {
+                        while (this.firstChild) { this.removeChild(this.lastChild); }
+                    }
+                });
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                "use strict";
+                var header = document.getElementById('header'),
+                    textarea = document.querySelector('textarea'),
+                    list_pool = (function () {
+                        var pool = [];
+                        return {
+                            banish(li) {
+                                var a = li.querySelector('a');
+                                a.setAttribute('href', '\/');
+                                a.innerText = '';
+                                pool.push(li);
+                            },
+                            summon(domain) {
+                                var li, a;
+                                if (pool.length) {
+                                    li = pool.pop();
+                                    a = li.querySelector('a');
+                                } else {
+                                    li = document.createElement('li');
+                                    a = document.createElement('a');
+                                    a.setAttribute('target', '_blank');
+                                    li.appendChild(a);
+                                }
+                                a.innerText = domain;
+                                if (domain.indexOf('\/\/') === -1) {
+                                    a.setAttribute('href', 'http:\/\/' + domain);
+                                } else {
+                                    a.setAttribute('href', domain);
+                                }
+                                return li;
+                            }
+                        };
+                    }()),
+                    ordered_list = document.querySelector('.list-area ol'),
+                    ol_children = ordered_list.children,
+                    docfrag = document.createDocumentFragment(),
+                    total_num = header.querySelector('.total-area .num');
+                textarea.addEventListener('input', function () {
+                    var value = this.value.toLowerCase().trim(), list, k, len, string;
+                    while (ordered_list.firstChild) {
+                        ordered_list.removeChild(ordered_list.lastChild);
+                    }
+                    if (value.length) {
+                        list = value.split(',');
+                        for (k = 0, len = list.length; k < len; k += 1) {
+                            string = list[k].trim();
+                            if (string) {
+                                docfrag.appendChild(list_pool.summon(string));
+                                list[k] = string;
+                            } else {
+                                list.splice(k, 1);
+                                k -= 1;
+                                len -= 1;
+                            }
+                        }
+                        ordered_list.appendChild(docfrag);
+                        total_num.innerText = list.length;
+                        console.log('TOTAL:', list.length);
+                        console.log(list);
+                    } else {
+                        total_num.innerText = "N\/A";
+                    }
+                }, false);
+                textarea.addEventListener('click', function () {
+                    this.select();
+                }, false);
+            }, false);
+        </script>
+    </body>
+</html>
