@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
         <meta name="theme-color" content="#eff7c2" />
         <!-- <meta name="theme-color" content="#404040" /> -->
-	<title>Domain Counter</title>
+        <title>Domain Counter</title>
         <link rel="shortcut icon" href="./favicon.ico" type="image/vnd.microsoft.icon" />
         <!-- <script type="text/javascript" src="./lib/documentRenderAndClone.js"></script> -->
 		<style type="text/css">
@@ -21,11 +21,14 @@
             body {
                 display: flex;
             }
+            body > * {
+                min-width: 800px;
+            }
             header {
                 background-color: #eff7c2;
                 /* background-color: #d4d4d4; */
                 display: flex;
-                height: 50px;
+                min-height: 50px;
                 position: fixed;
                 top: 0;
                 width: 100%;
@@ -38,7 +41,7 @@
             }
             header .title-area {
                 font-weight: bold;
-                width: 30%;
+                width: 35%;
             }
             header .total-area {
                 flex: 1;
@@ -59,7 +62,7 @@
             }
             section .input-area {
                 background-color: #637563;
-                width: 30%;
+                width: 35%;
             }
             section .list-area {
                 flex: 1;
