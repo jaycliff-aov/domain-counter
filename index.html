@@ -142,9 +142,12 @@
                         return {
                             banish(li) {
                                 var a = li.querySelector('a');
-                                a.setAttribute('href', '\/');
+                                a.setAttribute('href', '#');
                                 a.innerText = '';
                                 pool.push(li);
+                            },
+                            getStock() {
+                                return pool.length;
                             },
                             summon(domain) {
                                 var li, a;
@@ -173,8 +176,11 @@
                     total_num = header.querySelector('.total-area .num');
                 textarea.addEventListener('input', function () {
                     var value = this.value.toLowerCase().trim(), list, k, len, string;
-                    while (ordered_list.firstChild) {
-                        ordered_list.removeChild(ordered_list.lastChild);
+                    // while (ordered_list.firstChild) {
+                    //     ordered_list.removeChild(ordered_list.lastChild);
+                    // }
+                    while (ordered_list.firstElementChild) {
+                        list_pool.banish(ordered_list.removeChild(ordered_list.lastElementChild));
                     }
                     if (value.length) {
                         list = value.split(',');
@@ -191,8 +197,9 @@
                         }
                         ordered_list.appendChild(docfrag);
                         total_num.innerText = list.length;
-                        console.log('TOTAL:', list.length);
-                        console.log(list);
+                        console.log('POOL STOCK:', list_pool.getStock());
+                        // console.log('TOTAL:', list.length);
+                        // console.log(list);
                     } else {
                         total_num.innerText = "N\/A";
                     }
